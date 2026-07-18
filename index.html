@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>六国申诉平台</title>
+    <link rel="shortcut icon" href="templatedata/favicon.ico">
+    <link rel="stylesheet" href="templatedata/style.css">
+  </head>
+  <body>
+    <div id="tuanjie-container" class="tuanjie-desktop">
+      <canvas id="tuanjie-canvas" width=540 height=1160 tabindex="-1"></canvas>
+      <div id="tuanjie-loading-bar">
+        <div id="tuanjie-logo"></div>
+        <div id="tuanjie-progress-bar-empty">
+          <div id="tuanjie-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="tuanjie-warning"> </div>
+      <div id="tuanjie-footer">
+        <div id="tuanjie-webgl-logo"></div>
+        <div id="tuanjie-fullscreen-button"></div>
+        <div id="tuanjie-build-title">六国申诉平台</div>
+      </div>
+    </div>
+
+    <script>
+      var container = document.querySelector("#tuanjie-container");
+      var canvas = document.querySelector("#tuanjie-canvas");
+      var loadingBar = document.querySelector("#tuanjie-loading-bar");
+      var progressBarFull = document.querySelector("#tuanjie-progress-bar-full");
+      var fullscreenButton = document.querySelector("#tuanjie-fullscreen-button");
+      var warningBanner = document.querySelector("#tuanjie-warning");
+
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "build";
+      var loaderUrl = buildUrl + "/webglbuild.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/webglbuild.data",
+        frameworkUrl: buildUrl + "/webglbuild.framework.js",
+        codeUrl: buildUrl + "/webglbuild.wasm",
+        streamingAssetsUrl: "streamingassets",
+        companyName: "SixStatesAppeal",
+        productName: "六国申诉平台",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "tuanjie-mobile";
+        canvas.className = "tuanjie-mobile";
+      } else {
+        canvas.style.width = "540px";
+        canvas.style.height = "1160px";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createTuanjieInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+              }).then((tuanjieInstance) => {
+                loadingBar.style.display = "none";
+                fullscreenButton.onclick = () => {
+                  tuanjieInstance.SetFullscreen(1);
+                };
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
