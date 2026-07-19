@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
     <title>六国申诉平台</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="tuanjie-container" class="tuanjie-desktop">
+    <div id="tuanjie-container" class="tuanjie-mobile">
       <canvas id="tuanjie-canvas" width=540 height=1160 tabindex="-1"></canvas>
       <div id="tuanjie-loading-bar">
         <div id="tuanjie-logo"></div>
@@ -50,12 +51,12 @@
         updateBannerVisibility();
       }
 
-      var cdnUrl = "https://cdn.jsdelivr.net/gh/Beikai9/baike@main";
-      var loaderUrl = cdnUrl + "/webglbuild_brotli.loader.js";
+      var buildUrl = ".";
+      var loaderUrl = buildUrl + "/webglbuild_brotli.loader.js";
       var config = {
-        dataUrl: cdnUrl + "/webglbuild_brotli.data.unityweb",
-        frameworkUrl: cdnUrl + "/webglbuild_brotli.framework.js.unityweb",
-        codeUrl: cdnUrl + "/webglbuild_brotli.wasm.unityweb",
+        dataUrl: buildUrl + "/webglbuild_brotli.data.unityweb",
+        frameworkUrl: buildUrl + "/webglbuild_brotli.framework.js.unityweb",
+        codeUrl: buildUrl + "/webglbuild_brotli.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "SixStatesAppeal",
         productName: "六国申诉平台",
@@ -63,17 +64,8 @@
         showBanner: unityShowBanner,
       };
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        container.className = "tuanjie-mobile";
-        canvas.className = "tuanjie-mobile";
-      } else {
-        canvas.style.width = "540px";
-        canvas.style.height = "1160px";
-      }
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
 
       loadingBar.style.display = "block";
 
